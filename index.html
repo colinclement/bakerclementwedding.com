@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Liz &amp; Colin's Wedding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Texturina:opsz,wght@12..72,500;12..72,600;12..72,800&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+/* Layout: the header carries a real 15th-century French border (a corner Liz & Colin cropped from a public-domain scan, parchment removed) along the top and left edges only; its top band continues with a sideways stretch of the same border's left column on wider screens. Later sections are plain text pages, each headed by a flower cut from the Flemish border. Single deliberate light look. */
+:root {
+  --desk: #f2ead6;
+  --vellum: #fbf3e4;
+  --ink: #3a1c13;
+  --ink-soft: #6a5444;
+  --red: #b64022;   /* rgb(182,64,34) */
+  --blue: #235086;  /* rgb(35,80,134) */
+  --ochre: #b0753c;
+  --gold: #c99a3e;
+  --font-display: "Texturina", Georgia, serif;
+  --font-body: "EB Garamond", "Iowan Old Style", Georgia, serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { background: var(--desk); }
+body {
+  background: var(--desk);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.17rem;
+  line-height: 1.62;
+  padding-inline: 16px;
+  padding-block: 0 4rem;
+}
+a { color: var(--blue); text-decoration-color: rgba(182,64,34,.55); text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+nav.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--desk); margin-inline: -16px; padding: .55rem 16px;
+  border-bottom: 1px solid rgba(106,84,68,.2);
+}
+nav.top ul {
+  list-style: none; margin: 0 auto; padding: 0; max-width: 46rem;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: .1rem 1.3rem;
+  font-variant: small-caps; letter-spacing: .07em; font-size: 1.05rem;
+}
+nav.top li:nth-child(odd) a { color: var(--red); }
+nav.top li:nth-child(even) a { color: var(--blue); }
+nav.top a { text-decoration: none; }
+nav.top a:hover { text-decoration: underline; }
+
+/* ——— Header: the French border corner (cropped and rotated by Liz & Colin), top and left only ———
+   --iw is the width the whole border image would have; every piece is sized from it. */
+.hdr {
+  --iw: 508px; --lw: calc(var(--iw) * 0.2031);
+  position: relative; max-width: 56rem; margin: 0 auto;
+  min-height: calc(var(--iw) * 1.4515);
+  --gap: 4rem;  /* same distance from the top gold bar and the left gold bar */
+  padding: calc(var(--iw) * 0.2502 + var(--gap) - 10px) 1rem 3rem calc(var(--iw) * 0.2004 + var(--gap));
+}
+.hdr .b-corner, .hdr .b-ext, .hdr .b-end { position: absolute; top: 0; background-repeat: no-repeat; background-size: 100% 100%; }
+.hdr .b-corner {
+  left: 0; width: calc(var(--iw) * 0.6198); height: calc(var(--iw) * 1.4515); background-image: url("hdr_corner.webp");
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent), linear-gradient(to bottom, #000 calc(100% - 18px), transparent);
+  -webkit-mask-composite: source-in;
+          mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent), linear-gradient(to bottom, #000 calc(100% - 18px), transparent);
+          mask-composite: intersect;
+}
+/* the band continues with a stretch of the same border's left column, turned to run sideways */
+.hdr .b-ext {
+  left: calc(var(--iw) * 0.6198 - 24px); right: calc(var(--iw) * 0.3802 - 20px); height: calc(var(--iw) * 0.2586);
+  background: url("hdr_ext.webp") left top / auto 100% repeat-x;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 24px);
+          mask-image: linear-gradient(to right, transparent, #000 24px);
+}
+.hdr .b-end {
+  right: 0; width: calc(var(--iw) * 0.3802); height: calc(var(--iw) * 0.4939); background-image: url("hdr_end.webp");
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 10%);
+          mask-image: linear-gradient(to right, transparent, #000 10%);
+}
+.hdr-text { position: relative; max-width: 34rem; }
+.invite { margin: 0; color: var(--ink); font-variant: small-caps; letter-spacing: .08em; font-size: 1.2rem; }
+h1.names {
+  margin: 1rem 0 0; font-family: var(--font-display); font-weight: 600;
+  font-size: clamp(2.3rem, 7vw, 4.4rem); line-height: 1.05; text-wrap: balance; color: var(--blue);
+}
+/* first names stacked over last names, the ampersand between the two pairs */
+h1.names { display: grid; grid-template-columns: auto auto auto; align-items: center; justify-content: start; column-gap: .3em; }
+h1.names .who { display: grid; line-height: 1.02; }
+h1.names .first { color: var(--red); font-weight: 800; font-size: 1.2em; line-height: .9; }
+h1.names .amp { color: var(--red); font-size: .8em; line-height: 1; }
+.facts { margin-top: 1.8rem; display: grid; gap: .1rem; font-size: 1.3rem; line-height: 1.35; }
+.facts .date { color: var(--red); }
+.facts .place { color: var(--blue); }
+.facts .count { font-style: italic; color: var(--ink); font-size: 1.1rem; margin-top: .5rem; }
+@media (max-width: 40rem) {
+  .hdr { --iw: 300px; --gap: 40px; margin-inline: -16px; padding: calc(var(--iw) * 0.2502 + var(--gap) - 8px) 3rem 2.5rem calc(var(--iw) * 0.2004 + var(--gap)); }
+  .invite { font-size: clamp(.7rem, 3.5vw, .86rem); letter-spacing: .05em; }
+  h1.names { margin-top: .5rem; font-size: clamp(1.3rem, calc((100vw - 150px) / 7.8), 2.7rem); }
+  .facts .count { margin-top: .25rem; }
+  .facts { font-size: clamp(.95rem, 4.4vw, 1.12rem); margin-top: .9rem; }
+  .facts .count { font-size: clamp(.9rem, 4vw, 1.05rem); }
+}
+
+/* ——— Text pages ——— */
+.page { max-width: 44rem; margin-inline: auto; }
+section.ch { margin-top: 5rem; scroll-margin-top: 4.5rem; }
+.ch-head { display: flex; flex-direction: column; align-items: center; gap: .7rem; margin-bottom: 2rem; }
+.vignette {
+  width: 88px; height: 88px; display: block; object-fit: cover;
+  border: 2px solid var(--gold); outline: 1px solid var(--red); outline-offset: 3px;
+}
+.ch-head h2 { margin: 0; font-family: var(--font-display); font-weight: 600; color: var(--red); font-size: clamp(1.9rem, 5.5vw, 2.5rem); line-height: 1.1; text-align: center; text-wrap: balance; }
+.prose { max-width: 36rem; margin-inline: auto; }
+.prose p { margin: 0 0 1rem; text-wrap: pretty; }
+.placeholder { color: var(--ink-soft); font-style: italic; }
+.prose .cap { float: left; font-family: var(--font-display); font-weight: 600; color: var(--blue); font-size: 3.6em; line-height: .9; margin: .06em .12em 0 0; font-style: normal; }
+.pil { font-family: var(--font-display); font-weight: 600; padding-right: .4rem; }
+.pil.r { color: var(--red); } .pil.b { color: var(--blue); }
+
+/* Calendar */
+.cal { max-width: 22rem; margin: 0 auto; }
+.cal-head { text-align: center; font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; color: var(--blue); margin: 0 0 .4rem; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-variant-numeric: tabular-nums; border-block: 1px solid var(--red); padding-block: .4rem; row-gap: .1rem; }
+.cal-grid .dow { font-variant: small-caps; color: var(--red); font-size: .95rem; }
+.cal-grid .day { padding: .12rem 0; }
+.cal-grid .day.feast { color: var(--red); font-weight: 500; font-size: 1.3em; line-height: 1.1; }
+.cal-note { text-align: center; font-style: italic; color: var(--ink-soft); font-size: 1.02rem; margin: .7rem auto 0; }
+
+/* Schedule */
+.schedule { list-style: none; padding: 0; margin: 2.4rem auto 0; max-width: 34rem; display: grid; gap: .8rem; }
+.schedule li { display: grid; grid-template-columns: 1.2rem 5.4rem 1fr; gap: .3rem; align-items: baseline; }
+.schedule .t { color: var(--red); font-variant-numeric: tabular-nums; }
+.schedule strong { font-weight: 500; }
+.schedule .d { color: var(--ink-soft); }
+.schedule .what { min-width: 0; }
+
+/* Travel */
+.folios { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.8rem 2.6rem; }
+.folio { min-width: 0; }
+.folio h3 { margin: 0 0 .2rem; font-family: var(--font-display); font-weight: 600; font-size: 1.25rem; color: var(--blue); }
+.folio p { margin: 0 0 .5rem; }
+.folio .addr { font-style: italic; color: var(--ink-soft); }
+
+/* Party */
+.party { list-style: none; padding: 0; margin: 0 auto; max-width: 30rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1rem 2rem; text-align: center; }
+.party strong { display: block; font-weight: 500; font-size: 1.15rem; }
+.party em { font-style: normal; font-variant: small-caps; letter-spacing: .06em; color: var(--red); }
+
+/* RSVP */
+form.rsvp { max-width: 32rem; margin-inline: auto; display: grid; gap: 1.1rem; }
+.field { display: grid; gap: .25rem; }
+.field label, fieldset legend { font-variant: small-caps; letter-spacing: .07em; color: var(--red); }
+input[type=text], input[type=email], select, textarea {
+  font: inherit; color: var(--ink); background-color: var(--vellum);
+  border: 0; border-bottom: 1.5px solid var(--ink-soft); border-radius: 0; padding: .4rem .55rem; width: 100%;
+}
+/* text boxes and dropdowns share one height; dropdowns get a drawn arrow instead of the browser's own */
+input[type=text], input[type=email], select { height: 2.75rem; line-height: 1.2; }
+select {
+  -webkit-appearance: none; appearance: none; padding-right: 2rem; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%233a1c13' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right .7rem center; background-size: 12px 8px;
+}
+textarea { min-height: 5rem; resize: vertical; border: 1px solid var(--ink-soft); }
+fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: .35rem; }
+.choice { display: flex; gap: .55rem; align-items: center; }
+.choice input { accent-color: var(--red); width: 1.05rem; height: 1.05rem; }
+.row2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1.1rem; align-items: start; }
+button.send {
+  justify-self: center; font: 500 1.15rem var(--font-body); font-variant: small-caps; letter-spacing: .1em;
+  color: var(--vellum); background: var(--red); border: 0; cursor: pointer; padding: .55rem 2.2rem;
+}
+button.send:hover { background: #93331b; }
+.note { margin: 0; text-align: center; font-style: italic; color: var(--red); }
+.trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+button.send:disabled { opacity: .7; cursor: wait; }
+.hint { font-size: .95rem; font-style: italic; color: var(--ink-soft); }
+.guests { display: grid; gap: 1.1rem; }
+.guest { display: grid; gap: .5rem; padding-top: .9rem; border-top: 1px solid rgba(106,84,68,.25); }
+.guest-label { margin: 0; font-family: var(--font-display); font-weight: 600; color: var(--blue); font-size: 1.15rem; }
+.confirm { max-width: 32rem; margin: 0 auto; text-align: center; }
+.done-list { list-style: none; padding: 0; margin: .4rem 0 0; display: grid; gap: .15rem; }
+.done-list li span { color: var(--ink-soft); font-style: italic; }
+
+/* Photo carousel: swipe on phones, arrows and dots everywhere */
+.carousel { position: relative; max-width: 40rem; margin: 0 auto; }
+.track { display: flex; gap: 1.5rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; padding: 6px; }
+.track::-webkit-scrollbar { display: none; }
+.slide { flex: 0 0 100%; margin: 0; scroll-snap-align: center; min-width: 0; }
+.slide img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border: 3px solid var(--gold); outline: 1px solid var(--red); outline-offset: 3px; background: var(--vellum); }
+.slide figcaption { text-align: center; font-style: italic; color: var(--ink-soft); margin-top: .8rem; }
+.car-btn {
+  position: absolute; top: calc((100% - 3.6rem) / 2); transform: translateY(-50%);
+  width: 2.6rem; height: 2.6rem; border-radius: 50%; border: 1px solid var(--gold);
+  background: rgba(251,243,228,.92); color: var(--ink); font: 600 1.6rem/1 var(--font-body); cursor: pointer;
+  display: grid; place-items: center; padding: 0 0 .15rem;
+}
+.car-btn:hover { background: var(--vellum); color: var(--red); }
+.car-btn.prev { left: .7rem; } .car-btn.next { right: .7rem; }
+.car-btn:disabled { opacity: .35; cursor: default; }
+.dots { display: flex; justify-content: center; gap: .55rem; margin-top: .6rem; }
+.dots button { width: .7rem; height: .7rem; border-radius: 50%; border: 1px solid var(--red); background: transparent; padding: 0; cursor: pointer; }
+.dots button[aria-current="true"] { background: var(--red); }
+@media (prefers-reduced-motion: reduce) { .track { scroll-behavior: auto; } }
+.confirm .big { font-family: var(--font-display); font-weight: 600; font-size: 1.9rem; color: var(--blue); margin: 0; }
+
+/* FAQ */
+details { max-width: 36rem; margin: 0 auto; padding: .5rem 0; }
+summary { cursor: pointer; list-style: none; font-weight: 500; }
+summary::-webkit-details-marker { display: none; }
+details p { margin: .3rem 0 .2rem 1.6rem; }
+
+footer.end { margin-top: 5rem; text-align: center; }
+footer.end .sig { font-family: var(--font-display); font-weight: 600; font-size: 1.7rem; color: var(--red); margin: 0; }
+footer.end p { margin: .2rem 0; color: var(--ink-soft); }
+footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; }
+
+@media (max-width: 34rem) {
+  body { font-size: 1.08rem; }
+  .schedule li { grid-template-columns: 1.1rem 4.8rem 1fr; }
+  .vignette { width: 72px; height: 72px; }
+}
+</style>
+</head>
+<body style="margin:0">
+
+
+<nav class="top" aria-label="Sections">
+  <ul>
+    <li><a href="#story">Our Story</a></li>
+    <li><a href="#day">The Day</a></li>
+    <li><a href="#travel">Travel</a></li>
+    <li><a href="#party">Wedding Party</a></li>
+    <li><a href="#rsvp">RSVP</a></li>
+    <li><a href="#photos">Photos</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+</nav>
+
+<header class="hdr">
+  <div class="b-ext" aria-hidden="true"></div>
+  <div class="b-end" aria-hidden="true"></div>
+  <div class="b-corner" aria-hidden="true"></div>
+  <div class="hdr-text">
+    <p class="invite">Please join us for the wedding of</p>
+    <h1 class="names" aria-label="Liz Baker and Colin Clement"><span class="who" aria-hidden="true"><span><span class="first">L</span>iz</span><span>Baker</span></span><span class="amp" aria-hidden="true">&amp;</span><span class="who" aria-hidden="true"><span><span class="first">C</span>olin</span><span>Clement</span></span></h1>
+    <div class="facts">
+      <span class="date">Saturday, July 10, 2027</span>
+      <span class="place">Ithaca, New York</span>
+      <span class="count" id="count" aria-live="polite"></span>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+
+  <section class="ch" id="story">
+    <div class="ch-head"><img class="vignette" src="v_periwinkle.jpg" alt=""><h2>Our Story</h2></div>
+    <div class="prose">
+      <p><span class="cap">H</span><span class="placeholder">ow you met goes here. A few sentences about the first time Liz and Colin crossed paths, what you did on your first date, or the moment you both knew.</span></p>
+      <p class="placeholder">A second paragraph for the proposal: where it happened, who was more surprised, and what came next.</p>
+    </div>
+  </section>
+
+  <section class="ch" id="day">
+    <div class="ch-head"><img class="vignette" src="v_aster.jpg" alt=""><h2>The Day</h2></div>
+    <div class="cal">
+      <p class="cal-head">July 2027</p>
+      <div class="cal-grid" id="calGrid"></div>
+      <p class="cal-note">Medieval calendars wrote feast days in red ink. Ours is the 10th.</p>
+    </div>
+    <ol class="schedule">
+      <li><span class="pil r" aria-hidden="true">¶</span><span class="t">3:00 pm</span><span class="what"><strong>Guests arrive.</strong> <span class="d">Cider and lemonade on the lawn.</span></span></li>
+      <li><span class="pil b" aria-hidden="true">¶</span><span class="t">3:30 pm</span><span class="what"><strong>Ceremony.</strong> <span class="d">In the garden, about 30 minutes.</span></span></li>
+      <li><span class="pil r" aria-hidden="true">¶</span><span class="t">4:15 pm</span><span class="what"><strong>Cocktail hour.</strong> <span class="d">Drinks and small bites on the terrace.</span></span></li>
+      <li><span class="pil b" aria-hidden="true">¶</span><span class="t">6:00 pm</span><span class="what"><strong>Dinner.</strong> <span class="d">Long tables in the hall, toasts after the main course.</span></span></li>
+      <li><span class="pil r" aria-hidden="true">¶</span><span class="t">8:00 pm</span><span class="what"><strong>Dancing.</strong> <span class="d">Cake and music until late.</span></span></li>
+      <li><span class="pil b" aria-hidden="true">¶</span><span class="t">11:00 pm</span><span class="what"><strong>Send-off.</strong> <span class="d">Shuttles to town until 11:30.</span></span></li>
+    </ol>
+  </section>
+
+  <section class="ch" id="travel">
+    <div class="ch-head"><img class="vignette" src="v_tulip.jpg" alt=""><h2>Travel &amp; Stay</h2></div>
+    <div class="folios">
+      <div class="folio">
+        <h3>Venue</h3>
+        <p class="addr">Venue Name<br>Street Address, Ithaca, NY</p>
+        <p>Free parking on site. The ceremony is on grass, so choose shoes with that in mind.</p>
+        <p><a href="https://maps.google.com/?q=Ithaca+New+York" target="_blank" rel="noopener">Open in Maps</a></p>
+      </div>
+      <div class="folio">
+        <h3>Getting here</h3>
+        <p>Ithaca Tompkins International (ITH) is the closest airport. Syracuse (SYR) is a little over an hour's drive and often has more flights.</p>
+      </div>
+      <div class="folio">
+        <h3>Where to stay</h3>
+        <p>We've reserved a block of rooms at a nearby hotel under "Baker–Clement." Book by May 15, 2027.</p>
+      </div>
+      <div class="folio">
+        <h3>What to wear</h3>
+        <p>Garden formal. Rich colors are welcome. July evenings in the Finger Lakes can turn cool, so bring a layer.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch" id="party">
+    <div class="ch-head"><img class="vignette" src="v_pansy.jpg" alt=""><h2>Wedding Party</h2></div>
+    <ul class="party">
+      <li><strong>Friend's Name</strong><em>Maid of Honor</em></li>
+      <li><strong>Friend's Name</strong><em>Best Man</em></li>
+      <li><strong>Friend's Name</strong><em>Bridesmaid</em></li>
+      <li><strong>Friend's Name</strong><em>Groomsman</em></li>
+    </ul>
+  </section>
+
+  <section class="ch" id="gifts">
+    <div class="ch-head"><img class="vignette" src="v_daisybud.jpg" alt=""><h2>Registry</h2></div>
+    <div class="prose" style="text-align:center">
+      <p>Your being there is the best gift. If you'd like to give something more, we have a small registry and a honeymoon fund.</p>
+      <p><a href="https://www.zola.com" target="_blank" rel="noopener">View our registry</a></p>
+    </div>
+  </section>
+
+  <section class="ch" id="rsvp">
+    <div class="ch-head"><img class="vignette" src="v_hepatica.jpg" alt=""><h2>RSVP</h2></div>
+    <p class="prose" style="text-align:center;margin-bottom:1.5rem">Please reply by May 15, 2027. One reply per invitation is all we need.</p>
+    <form class="rsvp" id="rsvpForm" novalidate>
+      <fieldset>
+        <legend>Will you be there?</legend>
+        <label class="choice"><input type="radio" id="attendYes" name="attend" value="yes" checked> Yes, we'll be there</label>
+        <label class="choice"><input type="radio" id="attendNo" name="attend" value="no"> Sorry, we can't make it</label>
+      </fieldset>
+      <div class="row2">
+        <div class="field" id="partyField"><label for="rsvpParty">How many in your party?</label>
+          <select id="rsvpParty" name="guests"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></div>
+        <div class="field"><label for="rsvpEmail">Email</label><input id="rsvpEmail" name="email" type="email" autocomplete="email">
+          <span class="hint">One for your party, in case we need to reach you.</span></div>
+      </div>
+      <div class="guests" id="guestList"><!-- guest rows are built by the script below --></div>
+      <div class="field"><label for="rsvpNote">Note for Liz &amp; Colin</label><textarea id="rsvpNote" name="note" placeholder="Allergies, song requests, well wishes…"></textarea></div>
+      <div class="trap" aria-hidden="true"><label for="rsvpWebsite">Leave this empty</label><input id="rsvpWebsite" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+      <button class="send" type="submit">Send RSVP</button>
+      <p class="note" id="rsvpError" role="alert" hidden></p>
+    </form>
+    <div class="confirm" id="rsvpDone" hidden>
+      <p class="big" id="doneHead">Thank you!</p>
+      <p id="doneBody"></p>
+      <ul class="done-list" id="doneList"></ul>
+    </div>
+  </section>
+
+  <section class="ch" id="photos">
+    <div class="ch-head"><img class="vignette" src="v_pansybutterfly.jpg" alt=""><h2>Photos</h2></div>
+    <!-- To swap in your photos, replace photos/photo-1.jpg … photo-5.jpg (same names), or edit the src,
+         alt and caption on each <figure>. Add or remove <figure> blocks freely; the dots update themselves. -->
+    <div class="carousel" role="region" aria-roledescription="carousel" aria-label="Photos of Liz and Colin">
+      <div class="track" id="photoTrack" tabindex="0">
+        <figure class="slide"><img src="photos/photo-1.jpg" alt="Photo of Liz and Colin" loading="lazy"><figcaption>Caption for this photo</figcaption></figure>
+        <figure class="slide"><img src="photos/photo-2.jpg" alt="Photo of Liz and Colin" loading="lazy"><figcaption>Caption for this photo</figcaption></figure>
+        <figure class="slide"><img src="photos/photo-3.jpg" alt="Photo of Liz and Colin" loading="lazy"><figcaption>Caption for this photo</figcaption></figure>
+        <figure class="slide"><img src="photos/photo-4.jpg" alt="Photo of Liz and Colin" loading="lazy"><figcaption>Caption for this photo</figcaption></figure>
+        <figure class="slide"><img src="photos/photo-5.jpg" alt="Photo of Liz and Colin" loading="lazy"><figcaption>Caption for this photo</figcaption></figure>
+      </div>
+      <button class="car-btn prev" type="button" id="photoPrev" aria-label="Previous photo">‹</button>
+      <button class="car-btn next" type="button" id="photoNext" aria-label="Next photo">›</button>
+      <div class="dots" id="photoDots"></div>
+    </div>
+  </section>
+
+  <section class="ch" id="faq">
+    <div class="ch-head"><img class="vignette" src="v_aster2.jpg" alt=""><h2>Questions</h2></div>
+    <details><summary><span class="pil r">¶</span>Are kids invited?</summary><p>We love your little ones, but this will be an adults-only celebration.</p></details>
+    <details><summary><span class="pil b">¶</span>What if it rains?</summary><p>The ceremony moves indoors, and dinner is already inside.</p></details>
+    <details><summary><span class="pil r">¶</span>Can I bring a plus-one?</summary><p>Your invitation lists everyone we have room for. Reach out if you have questions.</p></details>
+    <details><summary><span class="pil b">¶</span>Is there parking?</summary><p>Yes, free on site. Shuttles also run from the hotel.</p></details>
+  </section>
+
+  <footer class="end">
+    <img class="vignette" src="v_whitebutterfly.jpg" alt="" style="margin:0 auto 1.2rem">
+    <p class="sig">Liz &amp; Colin</p>
+    <p>Questions? Email us at <span id="contactEmail" style="user-select:all">hello@example.com</span></p>
+    <p class="credit">Header border from a French book of hours, 15th century. Flowers from a Flemish book of hours, late 15th century. Both public domain.</p>
+  </footer>
+</main>
+
+<script>
+(function () {
+  var grid = document.getElementById('calGrid');
+  ['S','M','T','W','T','F','S'].forEach(function (d) { var e = document.createElement('div'); e.className = 'dow'; e.textContent = d; grid.appendChild(e); });
+  var start = new Date(2027, 6, 1).getDay();
+  for (var b = 0; b < start; b++) grid.appendChild(document.createElement('div'));
+  for (var day = 1; day <= 31; day++) {
+    var e = document.createElement('div'); e.className = 'day' + (day === 10 ? ' feast' : ''); e.textContent = day;
+    if (day === 10) e.setAttribute('aria-label', 'July 10, our wedding day');
+    grid.appendChild(e);
+  }
+
+  var wedding = new Date(2027, 6, 10), today = new Date(); today.setHours(0,0,0,0);
+  var d = Math.round((wedding - today) / 86400000);
+  document.getElementById('count').textContent = d > 1 ? d + ' days to go' : d === 1 ? 'Tomorrow!' : d === 0 ? 'Today is the day' : 'Just married';
+
+  /* RSVP: paste your Google Apps Script web app URL here (it ends in /exec).
+     While it's empty, the form only shows the thank-you message and saves nothing. */
+  var RSVP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyhZx9x97s_VZh6sYRAazfZj42R42IUhImjfZWifmkaCCUiAyRQyUgPypgJURKDJFsC/exec';
+  /* Dinner options, and the most guests one invitation can list. Edit freely. */
+  var MEALS = ['Roast chicken', 'Grilled salmon', 'Mushroom risotto (vegetarian)'];
+  var MAX_GUESTS = 6;
+
+  var form = document.getElementById('rsvpForm');
+  var sendBtn = form.querySelector('button.send');
+  var err = document.getElementById('rsvpError');
+  var partySel = document.getElementById('rsvpParty');
+  var partyField = document.getElementById('partyField');
+  var list = document.getElementById('guestList');
+
+  // Build one row per possible guest; rows beyond the party size are hidden and disabled,
+  // so they keep anything typed but are not sent.
+  partySel.innerHTML = '';
+  for (var n = 1; n <= MAX_GUESTS; n++) { var o = document.createElement('option'); o.textContent = n; partySel.appendChild(o); }
+  partySel.value = String(Math.min(2, MAX_GUESTS));
+  for (var i = 1; i <= MAX_GUESTS; i++) {
+    var row = document.createElement('div'); row.className = 'guest'; row.dataset.i = i;
+    var opts = '<option value="">Choose a dinner</option>' + MEALS.map(function (m) { return '<option>' + m + '</option>'; }).join('');
+    row.innerHTML =
+      '<p class="guest-label">' + (i === 1 ? 'You' : 'Guest ' + i) + '</p>' +
+      '<div class="row2">' +
+        '<div class="field"><label for="guest' + i + 'Name">Full name</label>' +
+        '<input id="guest' + i + 'Name" name="guest' + i + '_name" type="text" autocomplete="' + (i === 1 ? 'name' : 'off') + '"></div>' +
+        '<div class="field meal"><label for="guest' + i + 'Meal">Dinner</label>' +
+        '<select id="guest' + i + 'Meal" name="guest' + i + '_meal">' + opts + '</select></div>' +
+      '</div>';
+    list.appendChild(row);
+  }
+  function attending() { return document.getElementById('attendYes').checked; }
+  function syncRows() {
+    var yes = attending(), count = yes ? parseInt(partySel.value, 10) : 1;
+    partyField.hidden = !yes; partySel.disabled = !yes;
+    list.querySelectorAll('.guest').forEach(function (row) {
+      var i = +row.dataset.i, show = i <= count;
+      row.hidden = !show;
+      row.querySelectorAll('input, select').forEach(function (el) { el.disabled = !show; });
+      var meal = row.querySelector('.meal'); meal.hidden = !yes; meal.querySelector('select').disabled = !show || !yes;
+      row.querySelector('.guest-label').textContent = i === 1 ? (yes ? 'You' : 'Your name') : 'Guest ' + i;
+    });
+  }
+  partySel.addEventListener('change', syncRows);
+  form.querySelectorAll('input[name="attend"]').forEach(function (r) { r.addEventListener('change', syncRows); });
+  syncRows();
+
+  function showError(msg, el) { err.textContent = msg; err.hidden = false; if (el) el.focus(); }
+  function showThanks(yes, guests) {
+    document.getElementById('doneHead').textContent = yes ? 'See you there!' : "We'll miss you";
+    document.getElementById('doneBody').textContent = yes
+      ? 'Thanks, ' + guests[0].name + '. We have ' + guests.length + (guests.length === 1 ? ' guest' : ' guests') + ' down for dinner:'
+      : 'Thanks for letting us know, ' + guests[0].name + '.';
+    var ul = document.getElementById('doneList'); ul.innerHTML = '';
+    if (yes) guests.forEach(function (g) {
+      var li = document.createElement('li'); li.textContent = g.name + ' ';
+      var sp = document.createElement('span'); sp.textContent = g.meal.toLowerCase(); li.appendChild(sp); ul.appendChild(li);
+    });
+    form.hidden = true; document.getElementById('rsvpDone').hidden = false;
+  }
+
+  // One ID per reply. Retries resend the same ID, so the sheet never counts a reply twice.
+  function newId() {
+    var raw = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2);
+    return raw.replace(/[^a-z0-9]/gi, '').slice(0, 16);
+  }
+  var submissionId = newId();
+  var sending = false;
+  var TIMEOUT_MS = 20000;
+  // Any failure (no connection, a slow reply, a problem on Google's side) gets the same message:
+  // contact us directly. The address comes from the footer, so it only needs changing in one place.
+  function failMessage() {
+    var el = document.getElementById('contactEmail'), addr = el ? el.textContent.trim() : '';
+    return "Sorry, your RSVP didn't go through. Please message us" + (addr ? ' at ' + addr : '') + " and we'll add you to the list.";
+  }
+
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    if (sending) return;                       // ignore extra clicks and Enter presses while one is in flight
+    err.hidden = true;
+    var yes = attending(), count = yes ? parseInt(partySel.value, 10) : 1, guests = [];
+    for (var i = 1; i <= count; i++) {
+      var nameEl = document.getElementById('guest' + i + 'Name'), mealEl = document.getElementById('guest' + i + 'Meal');
+      var nm = nameEl.value.trim();
+      if (!nm) return showError(i === 1 ? 'Please add your name.' : 'Please add a name for guest ' + i + '.', nameEl);
+      if (yes && !mealEl.value) return showError('Please choose a dinner for ' + nm + '.', mealEl);
+      guests.push({ name: nm, meal: yes ? mealEl.value : '' });
+    }
+    if (!RSVP_ENDPOINT) { showThanks(yes, guests); return; }
+
+    var body = new URLSearchParams(new FormData(form));
+    body.set('submission_id', submissionId);
+
+    sending = true; sendBtn.disabled = true; sendBtn.textContent = 'Sending…';
+    var slow = setTimeout(function () { sendBtn.textContent = 'Still sending…'; }, 5000);
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, TIMEOUT_MS) : null;
+
+    fetch(RSVP_ENDPOINT, { method: 'POST', body: body, signal: ctrl ? ctrl.signal : undefined })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res || !res.ok) throw new Error((res && res.error) || 'not saved');
+        showThanks(yes, guests);
+      })
+      .catch(function () {
+        showError(failMessage());
+      })
+      .then(function () {
+        clearTimeout(slow); if (timer) clearTimeout(timer);
+        sending = false; sendBtn.disabled = false; sendBtn.textContent = 'Send RSVP';
+      });
+  });
+
+  /* Photo carousel */
+  var track = document.getElementById('photoTrack');
+  var slides = track.querySelectorAll('.slide');
+  var dots = document.getElementById('photoDots');
+  var prev = document.getElementById('photoPrev'), next = document.getElementById('photoNext');
+  slides.forEach(function (_, i) {
+    var d = document.createElement('button'); d.type = 'button'; d.setAttribute('aria-label', 'Show photo ' + (i + 1));
+    d.addEventListener('click', function () { go(i); }); dots.appendChild(d);
+  });
+  function current() { return Math.round(track.scrollLeft / (slides[0].offsetWidth + 24 || 1)); }
+  function go(i) { i = Math.max(0, Math.min(slides.length - 1, i)); track.scrollTo({ left: slides[i].offsetLeft - track.offsetLeft - 6 }); }
+  function update() {
+    var c = current();
+    dots.querySelectorAll('button').forEach(function (d, i) { d.setAttribute('aria-current', i === c ? 'true' : 'false'); });
+    prev.disabled = c <= 0; next.disabled = c >= slides.length - 1;
+  }
+  prev.addEventListener('click', function () { go(current() - 1); });
+  next.addEventListener('click', function () { go(current() + 1); });
+  var t; track.addEventListener('scroll', function () { clearTimeout(t); t = setTimeout(update, 60); });
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+
+</body>
+</html>
