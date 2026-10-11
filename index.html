@@ -54,77 +54,82 @@ nav.top a:hover { text-decoration: underline; }
 
 /* ——— Header: the French border corner (cropped and rotated by Liz & Colin), top and left only ———
    --iw is the width the whole border image would have; every piece is sized from it. */
+/* ——— The book: the French border frames the page on three sides. Top: the left corner, a band
+   continued from the border's own column, and the right corner. Each side: its corner piece, a stretch of
+   that side's column repeated for the full page height, and the side's own foot at the very bottom. */
+.book {
+  --iw: 508px;   /* the scale of the border; every piece is sized from it */
+  --gap: 4rem;   /* space between the gold bars and the text */
+  --clear: calc(var(--iw) * 0.2004 + var(--gap));   /* text keeps this far in from both sides */
+  /* the right gold bar sits closer to its edge than the left one, so the right side needs less room;
+     this keeps the content centred between the two gold bars */
+  --clearR: calc(var(--iw) * 0.133 + var(--gap));
+  position: relative; max-width: 56rem; margin: 0 auto;
+  padding-bottom: calc(var(--iw) * 0.6629 + 1rem);  /* room for the taller (right) foot */
+}
+.book .b-tl, .book .b-tr, .book .b-ext, .book .b-coll, .book .b-colr, .book .b-footl, .book .b-footr {
+  position: absolute; background-repeat: no-repeat; background-size: 100% 100%; pointer-events: none;
+}
+.book .b-tl { top: 0; left: 0; width: calc(var(--iw) * 0.5); height: calc(var(--iw) * 1.0311); background-image: url("tl.webp");
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent); }
+.book .b-tr { top: 0; right: 0; width: calc(var(--iw) * 0.3799); height: calc(var(--iw) * 0.8102); background-image: url("tr.webp");
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 24px); mask-image: linear-gradient(to right, transparent, #000 24px); }
+.book .b-ext {
+  top: 0; left: calc(var(--iw) * 0.5 - 24px); right: calc(var(--iw) * 0.3799 - 24px); height: calc(var(--iw) * 0.2635);
+  background: url("top_ext.webp") left top / auto 100% repeat-x;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+          mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+}
+/* "round" fits a whole number of repeats, so each column meets its foot cleanly */
+.book .b-coll { left: 0; top: calc(var(--iw) * 1.0311); bottom: calc(var(--iw) * 0.4419); width: calc(var(--iw) * 0.215);
+  background-image: url("col_l.webp"); background-size: 100% calc(var(--iw) * 1.0898); background-repeat: no-repeat round; }
+.book .b-colr { right: 0; top: calc(var(--iw) * 0.8102); bottom: calc(var(--iw) * 0.6629); width: calc(var(--iw) * 0.1551);
+  background-image: url("col_r.webp"); background-size: 100% calc(var(--iw) * 0.7072); background-repeat: no-repeat round; }
+.book .b-footl { left: 0; bottom: 0; width: calc(var(--iw) * 0.3749); height: calc(var(--iw) * 0.4419); background-image: url("foot_l.webp");
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 18px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 18px), transparent); }
+.book .b-footr { right: 0; bottom: 0; width: calc(var(--iw) * 0.2251); height: calc(var(--iw) * 0.6629); background-image: url("foot_r.webp");
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 18px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 18px), transparent); }
+
 .hdr {
-  --iw: 508px; --lw: calc(var(--iw) * 0.2031);
-  --gap: 4rem;  /* same distance from the top gold bar and the left gold bar */
   --top: calc(var(--iw) * 0.2502 + var(--gap) - 10px);
-  position: relative; display: flow-root; max-width: 56rem; margin: 0 auto;
-  padding: var(--top) 1rem 0;
+  position: relative; display: flow-root; padding: var(--top) 1rem 0;
 }
-/* The header text sits inside the gold bar. The Our Story heading is centred on the page beside the
-   foot of the border, and the story text starts below the border (a zero-width marker the text clears). */
-.hdr .hdr-text { margin-left: calc(var(--iw) * 0.2004 + var(--gap) - 1rem); }
-.hdr .border-end { float: left; width: 0; height: calc(var(--iw) * 1.4515 - var(--top)); }
-.hdr #story .prose { clear: left; padding-top: 1.6rem; }
-.hdr .carousel { display: flow-root; }
-.hdr #story { margin-top: 0; }
-/* The heading sits on the line where the left border ends: a zero-height row placed at the border's
-   bottom, with the flower and title stacked upward from it, so "Our Story" ends level with the border. */
-.hdr #story .ch-head { clear: left; height: 0; margin: 0; justify-content: flex-end; }
-.hdr .carousel { margin-top: 2.2rem; }
+.hdr .hdr-text { margin-left: calc(var(--clear) - 1rem); margin-right: calc(var(--clearR) - 1rem); }
+/* Our Story and everything after it: equal side space, so headings stay centred on the page
+   while the text keeps clear of the left column */
+.hdr #story { margin: 4rem calc(var(--clearR) - 1rem) 0 calc(var(--clear) - 1rem); }
+.book > main.page { max-width: none; padding-inline: var(--clear) var(--clearR); }
+.book > main.page > * { max-width: 44rem; margin-inline: auto; }
+.hdr .carousel { display: flow-root; margin-top: 2.2rem; }
 .hdr .carousel .car-btn { top: calc((100% - 3.6rem) / 2); }
-.hdr .b-corner, .hdr .b-ext, .hdr .b-end { position: absolute; top: 0; background-repeat: no-repeat; background-size: 100% 100%; }
-.hdr .b-corner {
-  left: 0; width: calc(var(--iw) * 0.6198); height: calc(var(--iw) * 1.4515); background-image: url("hdr_corner.webp");
-  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent), linear-gradient(to bottom, #000 calc(100% - 18px), transparent);
-  -webkit-mask-composite: source-in;
-          mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent), linear-gradient(to bottom, #000 calc(100% - 18px), transparent);
-          mask-composite: intersect;
-}
-/* the band continues with a stretch of the same border's left column, turned to run sideways */
-.hdr .b-ext {
-  left: calc(var(--iw) * 0.6198 - 24px); right: calc(var(--iw) * 0.3802 - 20px); height: calc(var(--iw) * 0.2586);
-  background: url("hdr_ext.webp") left top / auto 100% repeat-x;
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 24px);
-          mask-image: linear-gradient(to right, transparent, #000 24px);
-}
-.hdr .b-end {
-  right: 0; width: calc(var(--iw) * 0.3802); height: calc(var(--iw) * 0.4939); background-image: url("hdr_end.webp");
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 10%);
-          mask-image: linear-gradient(to right, transparent, #000 10%);
-}
-.hdr-text { position: relative; max-width: 34rem; }
-.invite { margin: 0; color: var(--ink); font-variant: small-caps; letter-spacing: .08em; font-size: 1.2rem; }
+.hdr-text { position: relative; text-align: center; }  /* centred between the gold bars */
+.invite { margin: 0; color: var(--ink); font-variant: small-caps; letter-spacing: .08em; font-size: 1.2rem; text-wrap: balance; }
 h1.names {
   margin: 1rem 0 0; font-family: var(--font-display); font-weight: 600;
-  font-size: clamp(2.3rem, 7vw, 4.4rem); line-height: 1.05; text-wrap: balance; color: var(--blue);
+  font-size: clamp(1.9rem, min(7vw, calc((min(100vw, 56rem) - var(--clear) - var(--clearR) - 2rem) / 8)), 4.4rem); line-height: 1.05; text-wrap: balance; color: var(--blue);
 }
 /* first names stacked over last names, the ampersand between the two pairs */
-h1.names { display: grid; grid-template-columns: auto auto auto; align-items: center; justify-content: start; column-gap: .3em; }
-h1.names .who { display: grid; line-height: 1.02; }
+h1.names { display: grid; grid-template-columns: auto auto auto; align-items: center; justify-content: center; column-gap: .3em; text-align: left; }
+h1.names .who { display: grid; justify-items: center; text-align: center; line-height: 1.02; }  /* Liz over Baker, Colin over Clement, each pair on its own centre line */
 h1.names .first { color: var(--red); font-weight: 800; font-size: 1.2em; line-height: .9; }
 h1.names .amp { color: var(--red); font-size: .8em; line-height: 1; }
-.facts { margin-top: 1.8rem; display: grid; gap: .1rem; font-size: 1.3rem; line-height: 1.35; }
+.facts { margin-top: 1.8rem; display: grid; justify-items: center; gap: .1rem; font-size: 1.3rem; line-height: 1.35; }
 .facts .date { color: var(--red); }
 .facts .place { color: var(--blue); }
 .facts .count { font-style: italic; color: var(--ink); font-size: 1.1rem; margin-top: .5rem; }
 @media (max-width: 40rem) {
-  .hdr { --iw: 300px; --gap: 40px; --top: calc(var(--iw) * 0.2502 + var(--gap) - 8px); margin-inline: -16px; padding: var(--top) 16px 0 16px; }
-  .hdr .hdr-text { padding-right: 2rem; }
-  /* the 16px side margin is already inside the frame, so the spacers are 16px narrower */
-  .hdr .hdr-text { margin-left: calc(var(--iw) * 0.2004 + var(--gap) - 16px); }
-  .hdr #story .prose { padding-top: 1.2rem; }
-  .invite { font-size: clamp(.7rem, 3.5vw, .86rem); letter-spacing: .05em; }
-  h1.names { margin-top: .5rem; font-size: clamp(1.3rem, calc((100vw - 150px) / 7.8), 2.7rem); }
+  /* phones: the border is smaller and the page runs edge to edge; text sits right of the column */
+  .book { --iw: 300px; --gap: 40px; --clear: calc(var(--iw) * 0.2004 + 20px); --clearR: calc(var(--iw) * 0.155 + 14px); margin-inline: -16px; }
+  .hdr { --top: calc(var(--iw) * 0.2502 + var(--gap) - 8px); padding: var(--top) 16px 0 16px; }
+  .hdr .hdr-text { margin-left: calc(var(--clear) - 16px); margin-right: calc(var(--clearR) - 16px); }
+  .hdr #story { margin: 3rem calc(var(--clearR) - 16px) 0 calc(var(--clear) - 16px); }
+  .book > main.page { padding-inline: var(--clear) var(--clearR); }
+  /* the invitation line sits level with the flowers hanging from the top-right corner, so it stops short of them */
+  .invite { font-size: clamp(.7rem, 3.2vw, .86rem); letter-spacing: .05em; padding-inline: calc(var(--iw) * 0.33 - var(--clearR)); }
+  h1.names { margin-top: .5rem; font-size: clamp(1.2rem, calc((100vw - 190px) / 7.8), 2.7rem); }
   .facts .count { margin-top: .25rem; }
   .facts { font-size: clamp(.95rem, 4.4vw, 1.12rem); margin-top: .9rem; }
   .facts .count { font-size: clamp(.9rem, 4vw, 1.05rem); }
-}
-
-@media (max-width: 22.5rem) {
-  /* on the narrowest phones the title would touch the border's foot, so it starts just below the border */
-  .hdr #story .ch-head { height: auto; padding-top: 1.4rem; margin-bottom: 1.2rem; justify-content: flex-start; }
-  .hdr #story .prose { padding-top: 0; }
 }
 
 /* ——— Text pages ——— */
@@ -161,14 +166,14 @@ section.ch { margin-top: 5rem; scroll-margin-top: 4.5rem; }
 .schedule .what { min-width: 0; }
 
 /* Travel */
-.folios { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.8rem 2.6rem; }
+.folios { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr)); gap: 1.8rem 2.6rem; }
 .folio { min-width: 0; }
 .folio h3 { margin: 0 0 .2rem; font-family: var(--font-display); font-weight: 600; font-size: 1.25rem; color: var(--blue); }
 .folio p { margin: 0 0 .5rem; }
 .folio .addr { font-style: italic; color: var(--ink-soft); }
 
 /* Party */
-.party { list-style: none; padding: 0; margin: 0 auto; max-width: 30rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1rem 2rem; text-align: center; }
+.party { list-style: none; padding: 0; margin: 0 auto; max-width: 30rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr)); gap: 1rem 2rem; text-align: center; }
 .party strong { display: block; font-weight: 500; font-size: 1.15rem; }
 .party em { font-style: normal; font-variant: small-caps; letter-spacing: .06em; color: var(--red); }
 
@@ -191,7 +196,7 @@ textarea { min-height: 5rem; resize: vertical; border: 1px solid var(--ink-soft)
 fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: .35rem; }
 .choice { display: flex; gap: .55rem; align-items: center; }
 .choice input { accent-color: var(--red); width: 1.05rem; height: 1.05rem; }
-.row2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1.1rem; align-items: start; }
+.row2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr)); gap: 1.1rem; align-items: start; }
 button.send {
   justify-self: center; font: 500 1.15rem var(--font-body); font-variant: small-caps; letter-spacing: .1em;
   color: var(--vellum); background: var(--red); border: 0; cursor: pointer; padding: .55rem 2.2rem;
@@ -277,13 +282,18 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
   </ul>
 </nav>
 
+<div class="book">
+  <div class="b-ext" aria-hidden="true"></div>
+  <div class="b-tl" aria-hidden="true"></div>
+  <div class="b-tr" aria-hidden="true"></div>
+  <div class="b-coll" aria-hidden="true"></div>
+  <div class="b-colr" aria-hidden="true"></div>
+  <div class="b-footl" aria-hidden="true"></div>
+  <div class="b-footr" aria-hidden="true"></div>
+
 <div class="hdr">
 
-  <div class="b-ext" aria-hidden="true"></div>
-  <div class="b-end" aria-hidden="true"></div>
-  <div class="b-corner" aria-hidden="true"></div>
-  <!-- marks where the left border ends; the story text starts below it -->
-  <div class="border-end" aria-hidden="true"></div>
+
   <header class="hdr-text">
     <p class="invite">Please join us for the wedding of</p>
     <h1 class="names" aria-label="Liz Baker and Colin Clement"><span class="who" aria-hidden="true"><span><span class="first">L</span>iz</span><span>Baker</span></span><span class="amp" aria-hidden="true">&amp;</span><span class="who" aria-hidden="true"><span><span class="first">C</span>olin</span><span>Clement</span></span></h1>
@@ -425,6 +435,7 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
     <p class="credit">Header border from a French book of hours, 15th century. Flowers from a Flemish book of hours, late 15th century. Both public domain.</p>
   </footer>
 </main>
+</div><!-- /book -->
 
 <script>
 (function () {

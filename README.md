@@ -1,4 +1,4 @@
-# Liz & Colin — wedding website
+# Liz & Colin — wedding website (three-sided frame)
 
 A static site for GitHub Pages. Everything the page needs is in this folder.
 
