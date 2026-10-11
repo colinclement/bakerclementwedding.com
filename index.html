@@ -23,6 +23,7 @@
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
+.rsvp-off #rsvp, .rsvp-off .rsvp-link { display: none !important; }
 html { background: var(--desk); }
 body {
   background: var(--desk);
@@ -176,7 +177,16 @@ button.send {
 button.send:hover { background: #93331b; }
 .note { margin: 0; text-align: center; font-style: italic; color: var(--red); }
 .trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-button.send:disabled { opacity: .7; cursor: wait; }
+button.send { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; }
+button.send:disabled { opacity: .85; cursor: wait; }
+.spin {
+  width: 1em; height: 1em; border-radius: 50%; flex: none;
+  border: 2px solid rgba(251,243,228,.35); border-top-color: var(--vellum);
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation-duration: 2.4s; } }
+.confirm .big:focus { outline: none; }
 .hint { font-size: .95rem; font-style: italic; color: var(--ink-soft); }
 .guests { display: grid; gap: 1.1rem; }
 .guest { display: grid; gap: .5rem; padding-top: .9rem; border-top: 1px solid rgba(106,84,68,.25); }
@@ -228,13 +238,19 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
 <body style="margin:0">
 
 
+<script>
+  /* ===== SHOW_RSVP: set to true to show the RSVP section and its menu link; false hides both. ===== */
+  var SHOW_RSVP = false;
+  if (!SHOW_RSVP) document.documentElement.classList.add('rsvp-off');
+</script>
+
 <nav class="top" aria-label="Sections">
   <ul>
     <li><a href="#story">Our Story</a></li>
     <li><a href="#day">The Day</a></li>
     <li><a href="#travel">Travel</a></li>
     <li><a href="#party">Wedding Party</a></li>
-    <li><a href="#rsvp">RSVP</a></li>
+    <li class="rsvp-link"><a href="#rsvp">RSVP</a></li>
     <li><a href="#photos">Photos</a></li>
     <li><a href="#faq">FAQ</a></li>
   </ul>
@@ -346,7 +362,7 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
       <p class="note" id="rsvpError" role="alert" hidden></p>
     </form>
     <div class="confirm" id="rsvpDone" hidden>
-      <p class="big" id="doneHead">Thank you!</p>
+      <p class="big" id="doneHead" tabindex="-1">Thank you!</p>
       <p id="doneBody"></p>
       <ul class="done-list" id="doneList"></ul>
     </div>
@@ -462,6 +478,10 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
       var sp = document.createElement('span'); sp.textContent = g.meal.toLowerCase(); li.appendChild(sp); ul.appendChild(li);
     });
     form.hidden = true; document.getElementById('rsvpDone').hidden = false;
+    // The form above was tall; bring the reader back to the top of the RSVP section to see the thank-you.
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.getElementById('rsvp').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    document.getElementById('doneHead').focus({ preventScroll: true });
   }
 
   // One ID per reply. Retries resend the same ID, so the sheet never counts a reply twice.
@@ -471,6 +491,12 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
   }
   var submissionId = newId();
   var sending = false;
+  function setButton(label, busy) {
+    sendBtn.textContent = '';
+    if (busy) { var sp = document.createElement('span'); sp.className = 'spin'; sp.setAttribute('aria-hidden', 'true'); sendBtn.appendChild(sp); }
+    sendBtn.appendChild(document.createTextNode(label));
+    sendBtn.setAttribute('aria-busy', busy ? 'true' : 'false');
+  }
   var TIMEOUT_MS = 20000;
   // Any failure (no connection, a slow reply, a problem on Google's side) gets the same message:
   // contact us directly. The address comes from the footer, so it only needs changing in one place.
@@ -496,23 +522,30 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
     var body = new URLSearchParams(new FormData(form));
     body.set('submission_id', submissionId);
 
-    sending = true; sendBtn.disabled = true; sendBtn.textContent = 'Sending…';
-    var slow = setTimeout(function () { sendBtn.textContent = 'Still sending…'; }, 5000);
+    sending = true; sendBtn.disabled = true; setButton('Sending…', true);
+    var slow = setTimeout(function () { setButton('Still sending…', true); }, 5000);
     var ctrl = window.AbortController ? new AbortController() : null;
     var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, TIMEOUT_MS) : null;
 
     fetch(RSVP_ENDPOINT, { method: 'POST', body: body, signal: ctrl ? ctrl.signal : undefined })
-      .then(function (r) { return r.json(); })
+      .then(function (r) {
+        return r.text().then(function (text) {
+          try { return JSON.parse(text); }
+          catch (_) { throw new Error('Expected JSON from the script but got HTTP ' + r.status + ': ' + text.slice(0, 300)); }
+        });
+      })
       .then(function (res) {
-        if (!res || !res.ok) throw new Error((res && res.error) || 'not saved');
+        if (!res || !res.ok) throw new Error('Script replied: ' + JSON.stringify(res));
         showThanks(yes, guests);
       })
-      .catch(function () {
+      .catch(function (e) {
+        // For debugging: open the browser's developer tools (Console tab) to see why it failed.
+        console.error('RSVP failed:', e && e.name === 'AbortError' ? 'no reply within ' + TIMEOUT_MS / 1000 + ' seconds' : e);
         showError(failMessage());
       })
       .then(function () {
         clearTimeout(slow); if (timer) clearTimeout(timer);
-        sending = false; sendBtn.disabled = false; sendBtn.textContent = 'Send RSVP';
+        sending = false; sendBtn.disabled = false; setButton('Send RSVP', false);
       });
   });
 
