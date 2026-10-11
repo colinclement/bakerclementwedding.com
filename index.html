@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f2ead6">
 <title>Liz &amp; Colin's Wedding</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Texturina:opsz,wght@12..72,500;12..72,600;12..72,800&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Texturina:opsz,wght@12..72,500;12..72,600;12..72,800&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&display=swap">
 <style>
 /* Layout: the header carries a real 15th-century French border (a corner Liz & Colin cropped from a public-domain scan, parchment removed) along the top and left edges only; its top band continues with a sideways stretch of the same border's left column on wider screens. Later sections are plain text pages, each headed by a flower cut from the Flemish border. Single deliberate light look. */
 :root {
@@ -42,7 +43,11 @@ nav.top {
   background: var(--desk); margin-inline: -16px; padding: .55rem 16px;
   border-bottom: 1px solid rgba(106,84,68,.2);
 }
+/* iPhone Safari draws the page behind its see-through address bar; this panel extends the menu's
+   background upward so content scrolling past never shows above the menu */
+nav.top::before { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 100vh; background: var(--desk); pointer-events: none; }
 nav.top ul {
+  font-weight: 700;
   list-style: none; margin: 0 auto; padding: 0; max-width: 46rem;
   display: flex; flex-wrap: wrap; justify-content: center; gap: .1rem 1.3rem;
   font-variant: small-caps; letter-spacing: .07em; font-size: 1.05rem;
@@ -134,7 +139,9 @@ h1.names .amp { color: var(--red); font-size: .8em; line-height: 1; }
 
 /* ——— Text pages ——— */
 .page { max-width: 44rem; margin-inline: auto; }
-section.ch { margin-top: 5rem; scroll-margin-top: 4.5rem; }
+section.ch { margin-top: 5rem; scroll-margin-top: 0; }
+/* menu links land each section just below the menu, whatever height it has (it wraps to two lines on phones) */
+html { scroll-padding-top: calc(var(--navh, 4.5rem) + 1rem); }
 .ch-head { display: flex; flex-direction: column; align-items: center; gap: .7rem; margin-bottom: 2rem; }
 .vignette {
   width: 88px; height: 88px; display: block; object-fit: cover;
@@ -455,6 +462,12 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
 
   /* RSVP: paste your Google Apps Script web app URL here (it ends in /exec).
      While it's empty, the form only shows the thank-you message and saves nothing. */
+  // Keep the jump-to-section offset equal to the menu's real height (it wraps on narrow screens).
+  var navEl = document.querySelector('nav.top');
+  function setNavH() { document.documentElement.style.setProperty('--navh', navEl.offsetHeight + 'px'); }
+  setNavH(); window.addEventListener('resize', setNavH);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(setNavH);
+
   var RSVP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyhZx9x97s_VZh6sYRAazfZj42R42IUhImjfZWifmkaCCUiAyRQyUgPypgJURKDJFsC/exec';
   /* Dinner options, and the most guests one invitation can list. Edit freely. */
   var MEALS = ['Roast chicken', 'Grilled salmon', 'Mushroom risotto (vegetarian)'];
