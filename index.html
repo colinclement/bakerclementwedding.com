@@ -56,11 +56,23 @@ nav.top a:hover { text-decoration: underline; }
    --iw is the width the whole border image would have; every piece is sized from it. */
 .hdr {
   --iw: 508px; --lw: calc(var(--iw) * 0.2031);
-  position: relative; max-width: 56rem; margin: 0 auto;
-  min-height: calc(var(--iw) * 1.4515);
   --gap: 4rem;  /* same distance from the top gold bar and the left gold bar */
-  padding: calc(var(--iw) * 0.2502 + var(--gap) - 10px) 1rem 3rem calc(var(--iw) * 0.2004 + var(--gap));
+  --top: calc(var(--iw) * 0.2502 + var(--gap) - 10px);
+  position: relative; display: flow-root; max-width: 56rem; margin: 0 auto;
+  padding: var(--top) 1rem 0;
 }
+/* The header text sits inside the gold bar. The Our Story heading is centred on the page beside the
+   foot of the border, and the story text starts below the border (a zero-width marker the text clears). */
+.hdr .hdr-text { margin-left: calc(var(--iw) * 0.2004 + var(--gap) - 1rem); }
+.hdr .border-end { float: left; width: 0; height: calc(var(--iw) * 1.4515 - var(--top)); }
+.hdr #story .prose { clear: left; padding-top: 1.6rem; }
+.hdr .carousel { display: flow-root; }
+.hdr #story { margin-top: 0; }
+/* The heading sits on the line where the left border ends: a zero-height row placed at the border's
+   bottom, with the flower and title stacked upward from it, so "Our Story" ends level with the border. */
+.hdr #story .ch-head { clear: left; height: 0; margin: 0; justify-content: flex-end; }
+.hdr .carousel { margin-top: 2.2rem; }
+.hdr .carousel .car-btn { top: calc((100% - 3.6rem) / 2); }
 .hdr .b-corner, .hdr .b-ext, .hdr .b-end { position: absolute; top: 0; background-repeat: no-repeat; background-size: 100% 100%; }
 .hdr .b-corner {
   left: 0; width: calc(var(--iw) * 0.6198); height: calc(var(--iw) * 1.4515); background-image: url("hdr_corner.webp");
@@ -97,12 +109,22 @@ h1.names .amp { color: var(--red); font-size: .8em; line-height: 1; }
 .facts .place { color: var(--blue); }
 .facts .count { font-style: italic; color: var(--ink); font-size: 1.1rem; margin-top: .5rem; }
 @media (max-width: 40rem) {
-  .hdr { --iw: 300px; --gap: 40px; margin-inline: -16px; padding: calc(var(--iw) * 0.2502 + var(--gap) - 8px) 3rem 2.5rem calc(var(--iw) * 0.2004 + var(--gap)); }
+  .hdr { --iw: 300px; --gap: 40px; --top: calc(var(--iw) * 0.2502 + var(--gap) - 8px); margin-inline: -16px; padding: var(--top) 16px 0 16px; }
+  .hdr .hdr-text { padding-right: 2rem; }
+  /* the 16px side margin is already inside the frame, so the spacers are 16px narrower */
+  .hdr .hdr-text { margin-left: calc(var(--iw) * 0.2004 + var(--gap) - 16px); }
+  .hdr #story .prose { padding-top: 1.2rem; }
   .invite { font-size: clamp(.7rem, 3.5vw, .86rem); letter-spacing: .05em; }
   h1.names { margin-top: .5rem; font-size: clamp(1.3rem, calc((100vw - 150px) / 7.8), 2.7rem); }
   .facts .count { margin-top: .25rem; }
   .facts { font-size: clamp(.95rem, 4.4vw, 1.12rem); margin-top: .9rem; }
   .facts .count { font-size: clamp(.9rem, 4vw, 1.05rem); }
+}
+
+@media (max-width: 22.5rem) {
+  /* on the narrowest phones the title would touch the border's foot, so it starts just below the border */
+  .hdr #story .ch-head { height: auto; padding-top: 1.4rem; margin-bottom: 1.2rem; justify-content: flex-start; }
+  .hdr #story .prose { padding-top: 0; }
 }
 
 /* ——— Text pages ——— */
@@ -251,16 +273,18 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
     <li><a href="#travel">Travel</a></li>
     <li><a href="#party">Wedding Party</a></li>
     <li class="rsvp-link"><a href="#rsvp">RSVP</a></li>
-    <li><a href="#photos">Photos</a></li>
     <li><a href="#faq">FAQ</a></li>
   </ul>
 </nav>
 
-<header class="hdr">
+<div class="hdr">
+
   <div class="b-ext" aria-hidden="true"></div>
   <div class="b-end" aria-hidden="true"></div>
   <div class="b-corner" aria-hidden="true"></div>
-  <div class="hdr-text">
+  <!-- marks where the left border ends; the story text starts below it -->
+  <div class="border-end" aria-hidden="true"></div>
+  <header class="hdr-text">
     <p class="invite">Please join us for the wedding of</p>
     <h1 class="names" aria-label="Liz Baker and Colin Clement"><span class="who" aria-hidden="true"><span><span class="first">L</span>iz</span><span>Baker</span></span><span class="amp" aria-hidden="true">&amp;</span><span class="who" aria-hidden="true"><span><span class="first">C</span>olin</span><span>Clement</span></span></h1>
     <div class="facts">
@@ -268,10 +292,7 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
       <span class="place">Ithaca, New York</span>
       <span class="count" id="count" aria-live="polite"></span>
     </div>
-  </div>
-</header>
-
-<main class="page">
+  </header>
 
   <section class="ch" id="story">
     <div class="ch-head"><img class="vignette" src="v_periwinkle.jpg" alt=""><h2>Our Story</h2></div>
@@ -279,7 +300,26 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
       <p><span class="cap">H</span><span class="placeholder">ow you met goes here. A few sentences about the first time Liz and Colin crossed paths, what you did on your first date, or the moment you both knew.</span></p>
       <p class="placeholder">A second paragraph for the proposal: where it happened, who was more surprised, and what came next.</p>
     </div>
+    <!-- To swap in your photos, replace photos/photo-1.jpg … photo-5.jpg (same names), or edit the src,
+         alt and caption on each <figure>. Add or remove <figure> blocks freely; the dots update themselves. -->
+    <div class="carousel" role="region" aria-roledescription="carousel" aria-label="Photos of Liz and Colin">
+      <div class="track" id="photoTrack" tabindex="0">
+        <figure class="slide"><img src="photos/photo-1.jpg" alt="Photo of Liz and Colin" loading="lazy"><figcaption>Caption for this photo</figcaption></figure>
+        <figure class="slide"><img src="photos/photo-2.jpg" alt="Photo of Liz and Colin" loading="lazy"><figcaption>Caption for this photo</figcaption></figure>
+        <figure class="slide"><img src="photos/photo-3.jpg" alt="Photo of Liz and Colin" loading="lazy"><figcaption>Caption for this photo</figcaption></figure>
+        <figure class="slide"><img src="photos/photo-4.jpg" alt="Photo of Liz and Colin" loading="lazy"><figcaption>Caption for this photo</figcaption></figure>
+        <figure class="slide"><img src="photos/photo-5.jpg" alt="Photo of Liz and Colin" loading="lazy"><figcaption>Caption for this photo</figcaption></figure>
+      </div>
+      <button class="car-btn prev" type="button" id="photoPrev" aria-label="Previous photo">‹</button>
+      <button class="car-btn next" type="button" id="photoNext" aria-label="Next photo">›</button>
+      <div class="dots" id="photoDots"></div>
+    </div>
   </section>
+</div>
+
+<main class="page">
+
+
 
   <section class="ch" id="day">
     <div class="ch-head"><img class="vignette" src="v_aster.jpg" alt=""><h2>The Day</h2></div>
@@ -368,23 +408,7 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
     </div>
   </section>
 
-  <section class="ch" id="photos">
-    <div class="ch-head"><img class="vignette" src="v_pansybutterfly.jpg" alt=""><h2>Photos</h2></div>
-    <!-- To swap in your photos, replace photos/photo-1.jpg … photo-5.jpg (same names), or edit the src,
-         alt and caption on each <figure>. Add or remove <figure> blocks freely; the dots update themselves. -->
-    <div class="carousel" role="region" aria-roledescription="carousel" aria-label="Photos of Liz and Colin">
-      <div class="track" id="photoTrack" tabindex="0">
-        <figure class="slide"><img src="photos/photo-1.jpg" alt="Photo of Liz and Colin" loading="lazy"><figcaption>Caption for this photo</figcaption></figure>
-        <figure class="slide"><img src="photos/photo-2.jpg" alt="Photo of Liz and Colin" loading="lazy"><figcaption>Caption for this photo</figcaption></figure>
-        <figure class="slide"><img src="photos/photo-3.jpg" alt="Photo of Liz and Colin" loading="lazy"><figcaption>Caption for this photo</figcaption></figure>
-        <figure class="slide"><img src="photos/photo-4.jpg" alt="Photo of Liz and Colin" loading="lazy"><figcaption>Caption for this photo</figcaption></figure>
-        <figure class="slide"><img src="photos/photo-5.jpg" alt="Photo of Liz and Colin" loading="lazy"><figcaption>Caption for this photo</figcaption></figure>
-      </div>
-      <button class="car-btn prev" type="button" id="photoPrev" aria-label="Previous photo">‹</button>
-      <button class="car-btn next" type="button" id="photoNext" aria-label="Next photo">›</button>
-      <div class="dots" id="photoDots"></div>
-    </div>
-  </section>
+
 
   <section class="ch" id="faq">
     <div class="ch-head"><img class="vignette" src="v_aster2.jpg" alt=""><h2>Questions</h2></div>
