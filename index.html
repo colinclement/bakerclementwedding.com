@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#f2ead6">
 <title>Liz &amp; Colin's Wedding</title>
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Texturina:opsz,wght@12..72,500;12..72,600;12..72,800&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&display=swap">
 <style>
@@ -25,6 +31,8 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 .rsvp-off #rsvp, .rsvp-off .rsvp-link { display: none !important; }
+.schedule-off #schedule { display: none !important; }
+.party-off #party, .party-off .party-link { display: none !important; }
 html { background: var(--desk); }
 body {
   background: var(--desk);
@@ -276,6 +284,13 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
   /* ===== SHOW_RSVP: set to true to show the RSVP section and its menu link; false hides both. ===== */
   var SHOW_RSVP = false;
   if (!SHOW_RSVP) document.documentElement.classList.add('rsvp-off');
+
+  /* ===== SHOW_SCHEDULE: set to true to show the schedule section; false hides it */
+  var SHOW_SCHEDULE = false;
+  if (!SHOW_SCHEDULE) document.documentElement.classList.add('schedule-off');
+
+  var SHOW_PARTY = false;
+  if (!SHOW_PARTY) document.documentElement.classList.add('party-off');
 </script>
 
 <nav class="top" aria-label="Sections">
@@ -283,7 +298,7 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
     <li><a href="#story">Our Story</a></li>
     <li><a href="#day">The Day</a></li>
     <li><a href="#travel">Travel</a></li>
-    <li><a href="#party">Wedding Party</a></li>
+    <li class="party-link"><a href="#party">Wedding Party</a></li>
     <li class="rsvp-link"><a href="#rsvp">RSVP</a></li>
     <li><a href="#faq">FAQ</a></li>
   </ul>
@@ -314,8 +329,29 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
   <section class="ch" id="story">
     <div class="ch-head"><img class="vignette" src="v_periwinkle.jpg" alt=""><h2>Our Story</h2></div>
     <div class="prose">
-      <p><span class="cap">H</span><span class="placeholder">ow you met goes here. A few sentences about the first time Liz and Colin crossed paths, what you did on your first date, or the moment you both knew.</span></p>
-      <p class="placeholder">A second paragraph for the proposal: where it happened, who was more surprised, and what came next.</p>
+      <p>
+        <span class="cap">W</span>
+        <span class="placeholder">
+          e met at a house party in the little city of Ithaca, NY in the year of our Lord 2014. Colin was a year into his physics doctorate at Cornell. Liz had just begun an apprenticeship at the Kitchen Theatre Company. We were crammed around a kitchen island while Colin explained the concept of entropy using a beer bottle as an example:
+          </p>
+      <p class="placeholder">
+
+          “There are more ways for this to be broken than it to be whole. So, the longer time goes on, the more likely it is to fall apart.”
+
+      <p class="placeholder"> 
+        But for us, after that, it was the total reverse. The longer time went on, the more we were drawn together. Card games on living room floors, chance encounters at town watering holes, late night walks over gorges.  
+
+        </p>
+      <p class="placeholder">
+
+          Over years that felt like days, we exchanged proposals casually & repeatedly. On the back porch of 213 Center St after we finished our graduate degrees. Stargazing on Orcas Island for our 5th anniversary. In the sunroom of our Ravenna rental after a call with Liz’s grandmother.
+          </p>
+      <p class="placeholder">
+
+          Then, in May 2025, while visiting friends in Spain & Morocco, we bought a ring for 8 euros from a secondhand market. Over a rooftop dinner in Barcelona, we exchanged letters - Colin gave Liz the ring - Liz gave Colin his favorite childhood book (smuggled with the help of his mom, Julie) - and we both said "of course, I'll marry you" one more time for good measure.
+          </p>
+        </span>
+      </p>
     </div>
     <!-- To swap in your photos, replace photos/photo-1.jpg … photo-5.jpg (same names), or edit the src,
          alt and caption on each <figure>. Add or remove <figure> blocks freely; the dots update themselves. -->
@@ -345,7 +381,7 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
       <div class="cal-grid" id="calGrid"></div>
       <p class="cal-note">Medieval calendars wrote feast days in red ink. Ours is the 10th.</p>
     </div>
-    <ol class="schedule">
+    <ol class="schedule" id="schedule">
       <li><span class="pil r" aria-hidden="true">¶</span><span class="t">3:00 pm</span><span class="what"><strong>Guests arrive.</strong> <span class="d">Cider and lemonade on the lawn.</span></span></li>
       <li><span class="pil b" aria-hidden="true">¶</span><span class="t">3:30 pm</span><span class="what"><strong>Ceremony.</strong> <span class="d">In the garden, about 30 minutes.</span></span></li>
       <li><span class="pil r" aria-hidden="true">¶</span><span class="t">4:15 pm</span><span class="what"><strong>Cocktail hour.</strong> <span class="d">Drinks and small bites on the terrace.</span></span></li>
@@ -360,9 +396,9 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
     <div class="folios">
       <div class="folio">
         <h3>Venue</h3>
-        <p class="addr">Venue Name<br>Street Address, Ithaca, NY</p>
-        <p>Free parking on site. The ceremony is on grass, so choose shoes with that in mind.</p>
-        <p><a href="https://maps.google.com/?q=Ithaca+New+York" target="_blank" rel="noopener">Open in Maps</a></p>
+        <p class="addr">Gratitude & Grace<br>235 Harvey Hill Rd, Ithaca, NY 14850</p>
+        <p>Free parking on site. The ceremony is on grass, so choose footwear accordingly.</p>
+        <p><a href="https://maps.app.goo.gl/pL97HHqJw3L67xZA7" target="_blank" rel="noopener">Open in Maps</a></p>
       </div>
       <div class="folio">
         <h3>Getting here</h3>
@@ -370,11 +406,11 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
       </div>
       <div class="folio">
         <h3>Where to stay</h3>
-        <p>We've reserved a block of rooms at a nearby hotel under "Baker–Clement." Book by May 15, 2027.</p>
+        <p>Ithaca has a variety of options - including Grayhaven Motel, Hotel Ithaca, Canopy by Hilton, and Hilton Garden Inn.  </p>
       </div>
       <div class="folio">
         <h3>What to wear</h3>
-        <p>Garden formal. Rich colors are welcome. July evenings in the Finger Lakes can turn cool, so bring a layer.</p>
+        <p>Daytime formal. July evenings in the Finger Lakes can turn cool, so bring a layer.</p>
       </div>
     </div>
   </section>
@@ -392,14 +428,14 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
   <section class="ch" id="gifts">
     <div class="ch-head"><img class="vignette" src="v_daisybud.jpg" alt=""><h2>Registry</h2></div>
     <div class="prose" style="text-align:center">
-      <p>Your being there is the best gift. If you'd like to give something more, we have a small registry and a honeymoon fund.</p>
-      <p><a href="https://www.zola.com" target="_blank" rel="noopener">View our registry</a></p>
+      <p>Your being there is the best gift!</p>
+      <!-- <p><a href="https://www.zola.com" target="_blank" rel="noopener">View our registry</a></p> -->
     </div>
   </section>
 
   <section class="ch" id="rsvp">
     <div class="ch-head"><img class="vignette" src="v_hepatica.jpg" alt=""><h2>RSVP</h2></div>
-    <p class="prose" style="text-align:center;margin-bottom:1.5rem">Please reply by May 15, 2027. One reply per invitation is all we need.</p>
+    <p class="prose" style="text-align:center;margin-bottom:1.5rem">Please reply by June 5th, 2027. One reply per invitation is all we need.</p>
     <form class="rsvp" id="rsvpForm" novalidate>
       <fieldset>
         <legend>Will you be there?</legend>
@@ -429,16 +465,16 @@ footer.end .credit { font-size: .92rem; font-style: italic; margin-top: 1.2rem; 
 
   <section class="ch" id="faq">
     <div class="ch-head"><img class="vignette" src="v_aster2.jpg" alt=""><h2>Questions</h2></div>
-    <details><summary><span class="pil r">¶</span>Are kids invited?</summary><p>We love your little ones, but this will be an adults-only celebration.</p></details>
-    <details><summary><span class="pil b">¶</span>What if it rains?</summary><p>The ceremony moves indoors, and dinner is already inside.</p></details>
+    <details><summary><span class="pil r">¶</span>Are kids invited?</summary><p>Yes! We want to celebrate with our full community - though after 10pm, it's 'Adult Swim' hours on the music. ;)</p></details>
+    <details><summary><span class="pil b">¶</span>What if it rains?</summary><p>The venue has indoor space in the form of a gorgeous, spacious barn. We will move the ceremony indoors, along with dinner.</p></details>
     <details><summary><span class="pil r">¶</span>Can I bring a plus-one?</summary><p>Your invitation lists everyone we have room for. Reach out if you have questions.</p></details>
-    <details><summary><span class="pil b">¶</span>Is there parking?</summary><p>Yes, free on site. Shuttles also run from the hotel.</p></details>
+    <details><summary><span class="pil b">¶</span>Is there parking?</summary><p>Yes, free on site.</p></details>
   </section>
 
   <footer class="end">
     <img class="vignette" src="v_whitebutterfly.jpg" alt="" style="margin:0 auto 1.2rem">
     <p class="sig">Liz &amp; Colin</p>
-    <p>Questions? Email us at <span id="contactEmail" style="user-select:all">hello@example.com</span></p>
+    <p>Questions? Email us at <span id="contactEmail" style="user-select:all">bakerclementwedding@gmail.com</span></p>
     <p class="credit">Header border from a French book of hours, 15th century. Flowers from a Flemish book of hours, late 15th century. Both public domain.</p>
   </footer>
 </main>
